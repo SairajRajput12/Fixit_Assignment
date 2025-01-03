@@ -1,0 +1,14 @@
+.form{
+    display: flex; 
+    flex-direction: column; 
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
