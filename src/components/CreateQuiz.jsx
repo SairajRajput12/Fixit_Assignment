@@ -50,7 +50,7 @@ export default function CreateQuiz() {
   };
 
   const manualForm = (
-    <div className="manual-form" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+    <div className="manual-form scrollable-container">
       <h2>Manual Question Entry</h2>
       {questions.map((q, index) => (
         <div key={index} className="question-entry">
@@ -103,7 +103,11 @@ export default function CreateQuiz() {
             <input
               type="text"
               value={q.title}
-              onChange={(e) => handleQuestionChange(index, 'title', e.target.value)}
+              onChange={(e) => {
+                const updatedContent = [...aiGeneratedContent];
+                updatedContent[index].title = e.target.value;
+                setAiGeneratedContent(updatedContent);
+              }}
             />
             <div>
               <h4>Options:</h4>
@@ -112,7 +116,11 @@ export default function CreateQuiz() {
                   key={optIndex}
                   type="text"
                   value={option}
-                  onChange={(e) => handleOptionChange(index, optIndex, e.target.value)}
+                  onChange={(e) => {
+                    const updatedContent = [...aiGeneratedContent];
+                    updatedContent[index].options[optIndex] = e.target.value;
+                    setAiGeneratedContent(updatedContent);
+                  }}
                 />
               ))}
               <Button className="add-question" onClick={() => handleAddOption(index)}>
@@ -123,18 +131,47 @@ export default function CreateQuiz() {
             <input
               type="text"
               value={q.answer}
-              onChange={(e) => handleQuestionChange(index, 'answer', e.target.value)}
+              onChange={(e) => {
+                const updatedContent = [...aiGeneratedContent];
+                updatedContent[index].answer = e.target.value;
+                setAiGeneratedContent(updatedContent);
+              }}
             />
           </div>
         ))
       ) : (
         <p>No AI-generated questions yet. Click the button to generate.</p>
       )}
-      <Button className='add-question' onClick={handleGenerateAI}>
+      <Button className="add-question" onClick={handleGenerateAI}>
         Regenerate AI Questions
       </Button>
     </div>
   );
+
+  const emailSetting = (
+    <div className="email-setting">
+      <h2>Set Allowed Emails</h2>
+      <div className="email-container" style={{ maxHeight: '200px', overflowY: 'auto', padding: '5px', border: '1px solid #ccc', borderRadius: '5px' }}>
+        {emails.map((email, index) => (
+          <div key={index} className="email-entry">
+            <label htmlFor={`email-${index}`}>Email {index + 1}:</label>
+            <input
+              id={`email-${index}`}
+              type="email"
+              value={email}
+              onChange={(e) => handleEmailChange(index, e.target.value)}
+              placeholder="Enter email..."
+            />
+          </div>
+        ))}
+      </div>
+      <Button className="add-email" onClick={handleAddEmail}>
+        Add Email
+      </Button>
+    </div>
+  );
+
+  console.log(questions)
 
   return (
     <div className="create-quiz">
@@ -162,24 +199,7 @@ export default function CreateQuiz() {
             placeholder="Enter duration in minutes"
           />
         </div>
-        <div className="email-setting">
-          <h2>Set Allowed Emails</h2>
-          {emails.map((email, index) => (
-            <div key={index} className="email-entry">
-              <label htmlFor={`email-${index}`}>Email {index + 1}:</label>
-              <input
-                id={`email-${index}`}
-                type="email"
-                value={email}
-                onChange={(e) => handleEmailChange(index, e.target.value)}
-                placeholder="Enter email..."
-              />
-            </div>
-          ))}
-          <Button className="add-email" onClick={handleAddEmail}>
-            Add Email
-          </Button>
-        </div>
+        {emailSetting}
         <Button className="submit-quiz" onClick={() => alert('Quiz Submitted!')}>
           Submit Quiz
         </Button>
