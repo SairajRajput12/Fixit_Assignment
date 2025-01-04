@@ -11,8 +11,8 @@ function App() {
     <>
         <HashRouter>
             <Routes>
-              <Route path='/' element={<Dashboard />} />
-              <Route path='/registration' element={<Signup />} />
+              <Route path='/' element={<Signup />} />
+              <Route path='/create/:userId' element={<Dashboard />} />
             </Routes>
         </HashRouter>
     </>

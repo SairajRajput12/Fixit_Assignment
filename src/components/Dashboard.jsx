@@ -16,16 +16,12 @@ export default function Dashboard() {
     content = <ShowQuiz />
   }
 
-  const handleSignout = () => {
-    console.log('signout called !!');
-  }
 
   return (
     <div className='dashboard'>
       <SideBoard>
           <Button onClick={() => setSelectTab('create')} className='project-button' >Create Quiz</Button>
           <Button onClick={() => setSelectTab('your')} className='project-button' >Your Quiz's</Button>
-          <Button onClick={handleSignout} className='project-button' >Signout</Button>
       </SideBoard>
       {content}
     </div>
