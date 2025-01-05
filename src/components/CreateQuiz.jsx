@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './CreateQuiz.css';
 import Form from '../UI/Form';
 import Button from '../UI/Button';
+import { useParams } from 'react-router-dom';
 
 export default function CreateQuiz() {
   const [quizType, setQuizType] = useState('manual');
@@ -11,6 +12,8 @@ export default function CreateQuiz() {
   const [aiGeneratedContent, setAiGeneratedContent] = useState(null);
   const [numQuestions, setNumQuestions] = useState(0); 
   const [quizCategory, setQuizCategory] = useState('');
+  const [error,setErrorMessage] = useState(''); 
+  const {userId} = useParams(); 
 
   const handleAddQuestion = () => {
     setQuestions([...questions, { title: '', options: [''], answer: '' }]);
@@ -44,17 +47,36 @@ export default function CreateQuiz() {
     setEmails([...emails, '']);
   };
 
-  const handleGenerateAI = () => {
-    const content = [];
-    for (let i = 0; i < numQuestions; i++) {
-      content.push({
-        title: `Sample Question ${i + 1} in ${quizCategory} category?`,
-        options: ['Option 1', 'Option 2', 'Option 3'],
-        answer: 'Option 1',
+  const generateQuestion = async() => {
+    try {
+      const response = await fetch('https://backend-code-ngs0.onrender.com/generate_data_ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          questionno:numQuestions,
+          type:quizCategory,
+        }),
       });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Question Generated Successfully!');
+        console.log(result.data[0]); 
+        setAiGeneratedContent(result.data);
+        setQuestions(result.data); 
+      } else {
+        setErrorMessage(result.message || 'Login failed. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred while logging in. Please try again.');
     }
-    setAiGeneratedContent(content);
-    setQuestions(content);
+  }
+
+  const handleGenerateAI = (e) => {
+    e.preventDefault(); 
+    generateQuestion(); 
   };
 
   const manualForm = (
@@ -165,7 +187,7 @@ export default function CreateQuiz() {
           onChange={(e) => setQuizCategory(e.target.value)}
         />
       </div>
-      <Button className="add-question" onClick={handleGenerateAI}>
+      <Button className="add-question" onClick={(e) => handleGenerateAI(e)}>
         Generate AI Questions
       </Button>
     </div>
@@ -196,6 +218,58 @@ export default function CreateQuiz() {
     </div>
   );
 
+  const submitInBackend = async() => {
+    
+    try {
+      const response = await fetch('http://127.0.0.1:5000/add_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username:userId,
+          time:timer, 
+          mcq:questions, 
+          users:emails
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Quiz Started Succesfully !');
+      } else {
+        setErrorMessage(result.message || 'Server Issue. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred while logging in. Please try again.');
+    }
+  }
+
+  const handleSubmitQuiz = (e) =>{
+    e.preventDefault(); 
+    console.log('clicked on handle submit'); 
+    submitInBackend(); 
+    /*
+      const [quizType, setQuizType] = useState('manual');
+      const [timer, setTimer] = useState(10);
+      const [questions, setQuestions] = useState([]);
+      const [emails, setEmails] = useState(['']);
+      const [aiGeneratedContent, setAiGeneratedContent] = useState(null);
+      const [numQuestions, setNumQuestions] = useState(0); 
+      const [quizCategory, setQuizCategory] = useState('');
+    */
+
+      setQuizType('manual'); 
+      setTimer(10); 
+      setQuestions([]); 
+      setEmails([]); 
+      setAiGeneratedContent(null); 
+      setNumQuestions(0); 
+      setQuizCategory(''); 
+  }
+
+  
+
   return (
     <div className="create-quiz">
       <Form className="quiz-form">
@@ -223,7 +297,7 @@ export default function CreateQuiz() {
           />
         </div>
         {emailSetting}
-        <Button className="submit-quiz" onClick={() => alert('Quiz Submitted!')}>
+        <Button className="submit-quiz" onClick={(e) => handleSubmitQuiz(e)}>
           Submit Quiz
         </Button>
       </Form>
