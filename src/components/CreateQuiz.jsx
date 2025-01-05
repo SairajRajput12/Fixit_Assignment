@@ -14,6 +14,7 @@ export default function CreateQuiz() {
   const [quizCategory, setQuizCategory] = useState('');
   const [error,setErrorMessage] = useState(''); 
   const {userId} = useParams(); 
+  const [quizTitle, setQuizTitle] = useState(''); 
 
   const handleAddQuestion = () => {
     setQuestions([...questions, { title: '', options: [''], answer: '' }]);
@@ -49,7 +50,7 @@ export default function CreateQuiz() {
 
   const generateQuestion = async() => {
     try {
-      const response = await fetch('https://backend-code-ngs0.onrender.com/generate_data_ai', {
+      const response = await fetch('http://127.0.0.1:5000/generate_data_ai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -204,16 +205,16 @@ export default function CreateQuiz() {
             <label htmlFor={`email-${index}`}>Email {index + 1}:</label>
             <input
               id={`email-${index}`}
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => handleEmailChange(index, e.target.value)}
-              placeholder="Enter email..."
+              placeholder="Enter usernames..."
             />
           </div>
         ))}
       </div>
       <Button className="add-email" onClick={handleAddEmail}>
-        Add Email
+        Add Username
       </Button>
     </div>
   );
@@ -230,7 +231,8 @@ export default function CreateQuiz() {
           username:userId,
           time:timer, 
           mcq:questions, 
-          users:emails
+          users:emails,
+          title: quizTitle, 
         }),
       });
 
@@ -249,15 +251,6 @@ export default function CreateQuiz() {
     e.preventDefault(); 
     console.log('clicked on handle submit'); 
     submitInBackend(); 
-    /*
-      const [quizType, setQuizType] = useState('manual');
-      const [timer, setTimer] = useState(10);
-      const [questions, setQuestions] = useState([]);
-      const [emails, setEmails] = useState(['']);
-      const [aiGeneratedContent, setAiGeneratedContent] = useState(null);
-      const [numQuestions, setNumQuestions] = useState(0); 
-      const [quizCategory, setQuizCategory] = useState('');
-    */
 
       setQuizType('manual'); 
       setTimer(10); 
@@ -266,6 +259,7 @@ export default function CreateQuiz() {
       setAiGeneratedContent(null); 
       setNumQuestions(0); 
       setQuizCategory(''); 
+      setQuizTitle('');
   }
 
   
@@ -282,6 +276,17 @@ export default function CreateQuiz() {
           <Button className="option-button" onClick={() => setQuizType('ai')}>
             Generate Through AI
           </Button>
+        </div>
+
+        <div className="quiz-title">
+          <label htmlFor="quiz-title">Quiz Title:</label>
+          <input
+            id="quiz-title"
+            type="text"
+            value={quizTitle}
+            onChange={(e) => setQuizTitle(e.target.value)}
+            placeholder="Enter quiz title..."
+          />
         </div>
         {quizType === 'manual' ? manualForm : aiGeneratedForm}
         <div className="timer-setting">

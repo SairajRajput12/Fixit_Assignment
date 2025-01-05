@@ -28,7 +28,7 @@
   }
   
   .quiz-form input {
-    width: 110%;
+    /* width: 110%; */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
