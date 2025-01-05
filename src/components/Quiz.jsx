@@ -19,7 +19,7 @@ export default function Quiz() {
 
   const callForPushResultToBackend = async() => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/end_game', {
+        const response = await fetch('https://backend-code-ngs0.onrender.com/end_game', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function Quiz() {
   console.log(users); 
 
   useEffect(() => {
-    const socketInstance = io('http://127.0.0.1:5000');
+    const socketInstance = io('https://backend-code-ngs0.onrender.com');
     setSocket(socketInstance);
 
     return () => {
@@ -54,7 +54,7 @@ export default function Quiz() {
 
   const fetchQuiz = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/quiz_data', {
+      const response = await fetch('https://backend-code-ngs0.onrender.com/quiz_data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export default function Quiz() {
 
   const get_data = async() => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/leaderboard', {
+        const response = await fetch('https://backend-code-ngs0.onrender.com/leaderboard', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

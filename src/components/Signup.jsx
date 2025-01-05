@@ -101,7 +101,7 @@ export default function Signup() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/signup', {
+      const response = await fetch('https://backend-code-ngs0.onrender.com/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,9 @@ export default function Signup() {
 
       const result = await response.json();
       if (response.ok) {
-        alert('Signup Successfully. Now you just need to login');
+        const userId = result.uid; 
+        alert('Your Generated User Id Is',userId);
+        navigate(`/create/${userId}`);
       } else {
         setErrorMessage(result.message || 'Signup failed. Please try again.');
       }
@@ -128,7 +130,7 @@ export default function Signup() {
     setErrorMessage(''); // Reset error message
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/login', {
+      const response = await fetch('https://backend-code-ngs0.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,6 +145,7 @@ export default function Signup() {
       if (response.ok) {
         alert('Login Successfully!');
         const userId = result.uid; 
+        alert('Your Generated User Id Is',userId);
         navigate(`/create/${userId}`);
       } else {
         setErrorMessage(result.message || 'Login failed. Please try again.');

@@ -10,7 +10,7 @@ export default function ShowQuiz() {
 
   const fetchQuiz = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/read_data', {
+      const response = await fetch('https://backend-code-ngs0.onrender.com/read_data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
