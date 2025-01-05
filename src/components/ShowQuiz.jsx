@@ -49,7 +49,7 @@ export default function ShowQuiz() {
   const expiredQuizzes = quizzes.filter((quiz) => quiz.status === 'expired');
 
   const handleStartQuiz = (quizId) => {
-    navigate(`/quiz/${quizId}`); 
+    navigate(`/create/quiz/${quizId}/${userId}`); 
   };
 
   const handleSeeResults = (quizId) => {
