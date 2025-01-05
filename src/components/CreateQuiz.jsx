@@ -9,6 +9,8 @@ export default function CreateQuiz() {
   const [questions, setQuestions] = useState([]);
   const [emails, setEmails] = useState(['']);
   const [aiGeneratedContent, setAiGeneratedContent] = useState(null);
+  const [numQuestions, setNumQuestions] = useState(0); 
+  const [quizCategory, setQuizCategory] = useState('');
 
   const handleAddQuestion = () => {
     setQuestions([...questions, { title: '', options: [''], answer: '' }]);
@@ -43,10 +45,16 @@ export default function CreateQuiz() {
   };
 
   const handleGenerateAI = () => {
-    setAiGeneratedContent([
-      { title: 'What is React?', options: ['Library', 'Framework', 'Language'], answer: 'Library' },
-      { title: 'What is useState?', options: ['Hook', 'Component', 'State'], answer: 'Hook' },
-    ]);
+    const content = [];
+    for (let i = 0; i < numQuestions; i++) {
+      content.push({
+        title: `Sample Question ${i + 1} in ${quizCategory} category?`,
+        options: ['Option 1', 'Option 2', 'Option 3'],
+        answer: 'Option 1',
+      });
+    }
+    setAiGeneratedContent(content);
+    setQuestions(content);
   };
 
   const manualForm = (
@@ -142,11 +150,28 @@ export default function CreateQuiz() {
       ) : (
         <p>No AI-generated questions yet. Click the button to generate.</p>
       )}
+      <div className="ai-settings">
+        <label>Number of Questions:</label>
+        <input
+          type="number"
+          value={numQuestions}
+          onChange={(e) => setNumQuestions(e.target.value)}
+          min="1"
+        />
+        <label>Quiz Category:</label>
+        <input
+         type='text'
+          value={quizCategory}
+          onChange={(e) => setQuizCategory(e.target.value)}
+        />
+      </div>
       <Button className="add-question" onClick={handleGenerateAI}>
-        Regenerate AI Questions
+        Generate AI Questions
       </Button>
     </div>
   );
+
+  console.log(aiGeneratedContent); 
 
   const emailSetting = (
     <div className="email-setting">
@@ -170,8 +195,6 @@ export default function CreateQuiz() {
       </Button>
     </div>
   );
-
-  console.log(questions)
 
   return (
     <div className="create-quiz">
