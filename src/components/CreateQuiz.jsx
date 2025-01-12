@@ -208,13 +208,13 @@ export default function CreateQuiz() {
               type="text"
               value={email}
               onChange={(e) => handleEmailChange(index, e.target.value)}
-              placeholder="Enter usernames..."
+              placeholder="Enter user ids..."
             />
           </div>
         ))}
       </div>
       <Button className="add-email" onClick={handleAddEmail}>
-        Add Username
+        Add User Id
       </Button>
     </div>
   );
