@@ -114,9 +114,9 @@ export default function Signup() {
 
       const result = await response.json();
       if (response.ok) {
-        const userId = result.uid; 
-        alert('Your Generated User Id Is',userId);
-        navigate(`/create/${userId}`);
+        // const userId = result.uid; 
+        alert('signup sucessful !');
+        // navigate(`/create/${userId}`);
       } else {
         setErrorMessage(result.message || 'Signup failed. Please try again.');
       }
@@ -145,7 +145,7 @@ export default function Signup() {
       if (response.ok) {
         alert('Login Successfully!');
         const userId = result.uid; 
-        alert('Your Generated User Id Is',userId);
+        alert(`Your Generated User Id Is ${result.uid}`);
         navigate(`/create/${userId}`);
       } else {
         setErrorMessage(result.message || 'Login failed. Please try again.');
